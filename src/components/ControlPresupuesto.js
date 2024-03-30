@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 import globalStyles from "../styles";
 import { formatearCantidad } from "../helpers";
 
-const controlPresupuesto = ({ presupuesto }) => {
+const controlPresupuesto = ({ presupuesto, gastos }) => {
   const [disponible, setDisponible] = useState(0);
   const [gastado, setGastado] = useState(0);
+
+  useEffect(() => {
+    const totalGastado = gastos.reduce(
+      (total, gasto) => Number(gasto.cantidad) + total,
+      0
+    );
+    const totalDisponible = presupuesto - totalGastado;
+    setGastado(totalGastado);
+    setDisponible(totalDisponible);
+  }, []);
   return (
     <View style={styles.contenedor}>
       <View style={styles.centrarGrafica}>
