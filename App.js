@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Alert, Pressable, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  Pressable,
+  Image,
+  Modal,
+} from "react-native";
 import Header from "./src/components/Header";
 import NuevoPresupuesto from "./src/components/NuevoPresupuesto";
 import ControlPresupuesto from "./src/components/ControlPresupuesto";
+import FormularioGasto from "./src/components/FormularioGasto";
 
 export default function App() {
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
   const [presupuesto, setPresupuesto] = useState(0);
   const [gastos, setGastos] = useState([]);
+  const [modal, setModal] = useState(false);
 
   const handleNuevoPresupuesto = (presupuesto) => {
     //console.log("desde app", presupuesto);
@@ -33,8 +43,19 @@ export default function App() {
           />
         )}
       </View>
+      {modal && (
+        <Modal
+          animationType="slide"
+          visible={modal}
+          onRequestClose={() => {
+            setModal(!modal);
+          }}
+        >
+          <FormularioGasto setModal={setModal} />
+        </Modal>
+      )}
       {isValidPresupuesto && (
-        <Pressable>
+        <Pressable onPress={() => setModal(!modal)}>
           <Image
             style={styles.imagen}
             source={require("./src/img/nuevo-gasto.png")}
