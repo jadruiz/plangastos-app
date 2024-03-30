@@ -1,20 +1,41 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Alert } from "react-native";
+import Header from "./src/components/Header";
+import NuevoPresupuesto from "./src/components/NuevoPresupuesto";
+import ControlPresupuesto from "./src/components/ControlPresupuesto";
 
 export default function App() {
+  const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
+  const handleNuevoPresupuesto = (presupuesto) => {
+    //console.log("desde app", presupuesto);
+    if (Number(presupuesto) > 0) {
+      setIsValidPresupuesto(true);
+    } else {
+      Alert.alert("Error", "El presupuesto no puede ser 0 o menor");
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Hello world!</Text>
-      <StatusBar style="auto" />
+    <View style={styles.contenedor}>
+      <View style={styles.header}>
+        <Header />
+        {isValidPresupuesto ? (
+          <ControlPresupuesto />
+        ) : (
+          <NuevoPresupuesto handleNuevoPresupuesto={handleNuevoPresupuesto} />
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  contenedor: {
+    backgroundColor: "#f5f5f5",
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  header: {
+    backgroundColor: "#3b82f6",
   },
 });
